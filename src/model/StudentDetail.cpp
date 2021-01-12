@@ -1,6 +1,6 @@
 #include "StudentDetail.h"
 
-StudentDetail::StudentDetail(int enrid,
+StudentDetail::StudentDetail(long enrid,
                              const String &name,
                              const String &email,
                              const String &branch,

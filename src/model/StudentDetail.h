@@ -5,15 +5,15 @@
 class StudentDetail
 {
 public:
-    int id;
-    int enrid;
+    long  id;
+    long  enrid;
     String name;
     String email;
     String branch;
     String faceid;
     String feature;
 
-    StudentDetail(int enrid,
+    StudentDetail(long  enrid,
                 const String &name,
                 const String &email,
                 const String &branch,

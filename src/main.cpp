@@ -34,6 +34,8 @@
 #define DEBUG_ON 1
 
 using namespace std;
+StudentDetailService studentService;
+
 
 void setup()
 {
@@ -46,21 +48,32 @@ void setup()
   SPI.begin();
   SD.begin();
   sqlite3_initialize();
-  StudentDetailService studentService("/sd/hell");
+  studentService.Db_open("/sd/mm123");
+  studentService.DropTable();
+  if(studentService.rc != SQLITE_DONE)
+  {
+      Serial.println("error dropping table");
+      Serial.print(sqlite3_extended_errcode(studentService._db));
+      Serial.print(" ");
+      Serial.println(sqlite3_errmsg(studentService._db));
+    }
   studentService.CreateTable();
   if (studentService.rc == SQLITE_DONE)
   {
     Serial.println("Student table created !!");
-    StudentDetail student(random(0,99999), "Maulik", "maulikp163@gmail.com", "Electrical", "faceid", "feature");
-    StudentDetail student2(random(0,99999), "Chahil", "Chahil@gmail.com", "Computer", "faceid", "feature");
-    if (studentService.InsertDetail(student) != SQLITE_DONE)
+    long n1 = random(0,99999);
+    long n2 = random(0,99999);
+
+    StudentDetail student(n1, "Chahil", "maulik@gmail.com", "Electrical", "faceid", "feature");
+     if (studentService.InsertDetail(student) != SQLITE_DONE)
     {
       Serial.println("error 1 inserted row");
       Serial.print(sqlite3_extended_errcode(studentService._db));
       Serial.print(" ");
       Serial.println(sqlite3_errmsg(studentService._db));
     }
-    if (studentService.InsertDetail(student2) != SQLITE_DONE)
+    StudentDetail student1(n2, "GGHGHH",  "GGHGHH@gmail.com", "Electrical", "faceid", "feature");
+     if (studentService.InsertDetail(student1) != SQLITE_DONE)
     {
       Serial.println("error 2 inserted row");
       Serial.print(sqlite3_extended_errcode(studentService._db));
@@ -68,20 +81,25 @@ void setup()
       Serial.println(sqlite3_errmsg(studentService._db));
     }
 
+    Serial.println();
+    Serial.print("Getting All Students ");
+    Serial.println();
+
     std::vector<StudentDetail> students = studentService.GetAllStudents();
 
     if (studentService.rc == SQLITE_DONE)
     {
-      Serial.println("Id  Name      Email         Branch        Faceid    Feature");
+      
       for (int i = 0; i < students.size(); i++)
       {
-        StudentDetail s = students[i];
-        Serial.print(student.id);
-        Serial.print("  " + student.name);
-        Serial.print("  " + student.email);
-        Serial.print("  " + student.branch);
-        Serial.print("  " + student.faceid);
-        Serial.print("  " + student.feature);
+        Serial.println(students[i].id);
+        Serial.println(students[i].enrid);
+        Serial.println(students[i].name);
+        Serial.println(students[i].email);
+        Serial.println(students[i].branch);
+        Serial.println(students[i].faceid);
+        Serial.println(students[i].feature);
+        Serial.println("     ");
       }
     }
     else
@@ -91,6 +109,69 @@ void setup()
       Serial.print(" ");
       Serial.println(sqlite3_errmsg(studentService._db));
     }
+    Serial.println();
+    Serial.print("Getting Student with ENRID = ");
+    Serial.print(n1);
+    Serial.println();
+
+    students = studentService.GetStudent(n1);
+
+    if (studentService.rc == SQLITE_DONE)
+    {
+      
+      for (int i = 0; i < students.size(); i++)
+      {
+        Serial.println(students[i].id);
+        Serial.println(students[i].enrid);
+        Serial.println(students[i].name);
+        Serial.println(students[i].email);
+        Serial.println(students[i].branch);
+        Serial.println(students[i].faceid);
+        Serial.println(students[i].feature);
+        Serial.println("     ");
+      }
+    }
+    else
+    {
+      Serial.println("Error fetching student data");
+      Serial.print(sqlite3_extended_errcode(studentService._db));
+      Serial.print(" ");
+      Serial.println(sqlite3_errmsg(studentService._db));
+    }
+
+    String query = "WHERE name = " + String("'GGHGHH'");
+
+    Serial.println();
+    Serial.print("Getting Student with Query");
+    Serial.println();
+    Serial.println(query);
+
+    students = studentService.GetFromQuery(query);
+
+    if (studentService.rc == SQLITE_DONE)
+    {
+      
+      for (int i = 0; i < students.size(); i++)
+      {
+        Serial.println(students[i].id);
+        Serial.println(students[i].enrid);
+        Serial.println(students[i].name);
+        Serial.println(students[i].email);
+        Serial.println(students[i].branch);
+        Serial.println(students[i].faceid);
+        Serial.println(students[i].feature);
+        Serial.println("     ");
+      }
+    }
+    else
+    {
+      Serial.println("Error fetching query data");
+      Serial.print(sqlite3_extended_errcode(studentService._db));
+      Serial.print(" ");
+      Serial.println(sqlite3_errmsg(studentService._db));
+    }
+
+    
   }
   else
   {

@@ -12,14 +12,15 @@ class DBService
 public:
     int rc;
     char *zErrMsg;
-    DBService(char name[]);
+    DBService();
     virtual void CreateTable() = 0;
-    virtual void DropTable() = 0;
+    virtual int DropTable() = 0;
     sqlite3 *_db = NULL;
+    int Db_open(char name[]);
 
 protected:
     char _db_name[MAX_FILE_NAME_LEN];
-    int Db_open();
+    
     
 };
 

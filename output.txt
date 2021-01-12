@@ -1,0 +1,40 @@
+Opened database successfully
+Student table created !!
+
+Getting All Students
+1
+2031
+Chahil
+maulik@gmail.com
+Electrical
+faceid
+feature
+
+2
+81826
+GGHGHH
+GGHGHH@gmail.com
+Electrical
+faceid
+feature
+
+
+Getting Student with ENRID = 2031
+1
+2031
+Chahil
+maulik@gmail.com
+Electrical
+faceid
+feature
+
+
+Getting Student with Query
+WHERE name = 'GGHGHH'
+2
+81826
+GGHGHH
+GGHGHH@gmail.com
+Electrical
+faceid
+feature

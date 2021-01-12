@@ -11,12 +11,13 @@ private:
 
 
 public:
-    StudentDetailService(char name[]);
     StudentDetailService();
     int InsertDetail(StudentDetail StudentDetail);
     void CreateTable();
-    void DropTable();
+    int DropTable();
     std::vector<StudentDetail> GetAllStudents();
+    std::vector<StudentDetail> GetStudent(long enrid);
+    std::vector<StudentDetail> GetFromQuery(const String &query);
 };
 
 
